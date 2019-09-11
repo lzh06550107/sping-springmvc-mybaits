@@ -26,6 +26,7 @@
     </bean>
 
     <!--2.数据源 druid-->
+    <!--https://github.com/alibaba/druid/wiki/DruidDataSource%E9%85%8D%E7%BD%AE%E5%B1%9E%E6%80%A7%E5%88%97%E8%A1%A8-->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
           init-method="init" destroy-method="close">
         <property name="driverClassName" value="${jdbc.driverClassName}" />
@@ -53,26 +54,54 @@
         <property name="testOnReturn" value="false" />
 
         <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
-        <property name="poolPreparedStatements" value="true" />
+        <!-- 是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。-->
+        <property name="poolPreparedStatements" value="false" />
         <property name="maxPoolPreparedStatementPerConnectionSize"
-                  value="20" />
+                  value="-1" />
 
         <!-- 这里配置提交方式，默认就是TRUE，可以不用配置 -->
-
         <property name="defaultAutoCommit" value="true" />
 
         <!-- 验证连接有效与否的SQL，不同的数据配置不同 -->
         <property name="validationQuery" value="select 1 " />
-        <property name="filters" value="stat" />
+
+        <!-- 配置监控统计拦截的filters
+        Druid的监控统计功能是通过filter-chain扩展实现，如果你要打开监控统计功能，配置StatFilter，具体看这里
+        -->
         <property name="proxyFilters">
             <list>
-                <ref bean="logFilter" />
+                <ref bean="druid_stat_filter"/>
+                <ref bean="druid_wall_filter"/>
+                <ref bean="druid_log_filter"/>
             </list>
         </property>
     </bean>
 
-    <bean id="logFilter" class="com.alibaba.druid.filter.logging.Slf4jLogFilter">
-        <property name="statementExecutableSqlLogEnable" value="false" />
+
+    <bean class="com.alibaba.druid.filter.stat.StatFilter" id="druid_stat_filter">
+        <!-- 慢sql规则，单位毫秒 -->
+        <property name="slowSqlMillis" value="10000"/>
+        <!-- 记录慢sql到日志 -->
+        <property name="logSlowSql" value="true"/>
+        <!-- 统计时合并相似sql -->
+        <property name="mergeSql" value="true"/>
+    </bean>
+
+    <!-- sql防御 -->
+    <bean class="com.alibaba.druid.wall.WallFilter" id="druid_wall_filter">
+        <!-- 记录违反规则的sql到日志 -->
+        <property name="logViolation" value="true"/>
+    </bean>
+
+    <bean class="com.alibaba.druid.filter.logging.Slf4jLogFilter" id="druid_log_filter">
+        <!-- 记录真正执行的语句，即参数已注入的sql -->
+        <property name="statementExecutableSqlLogEnable" value="true"/>
+        <!-- 其它配置 -->
+        <property name="statementCreateAfterLogEnabled" value="false"/>
+        <property name="statementPrepareAfterLogEnabled" value="false"/>
+        <property name="statementParameterSetLogEnabled" value="false"/>
+        <property name="statementCloseAfterLogEnabled" value="false"/>
+        <property name="resultSetCloseAfterLogEnabled" value="false"/>
     </bean>
 
     <!--3.配置SqlSession Factory对象 -->
@@ -93,5 +122,24 @@
         <!-- 通过构造函数注入 -->
         <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
     </bean>
+
+    <!--配置_Druid和Spring关联监控配置-->
+    <bean id="druid-stat-interceptor"
+          class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor">
+    </bean>
+
+    <bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut"
+          scope="prototype">
+        <property name="patterns">
+            <list>
+                <value>cn.liaozhonghao.www.service.*</value>
+                <value>cn.liaozhonghao.www.dao.*</value>
+            </list>
+        </property>
+    </bean>
+
+    <aop:config>
+        <aop:advisor advice-ref="druid-stat-interceptor" pointcut-ref="druid-stat-pointcut" />
+    </aop:config>
 
 </beans>
