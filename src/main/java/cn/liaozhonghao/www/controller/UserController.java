@@ -26,4 +26,8 @@ public class UserController {
         }
         return "hello";
     }
+
+    public  boolean add(User user) {
+        return this.userService.insert(user);
+    }
 }

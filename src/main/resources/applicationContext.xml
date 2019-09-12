@@ -107,6 +107,7 @@
     <!--3.配置SqlSession Factory对象 -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
         <!-- 自动扫描mapping.xml文件 -->
         <property name="mapperLocations" value="classpath*:mapper/*.xml"/>
     </bean>
@@ -141,5 +142,14 @@
     <aop:config>
         <aop:advisor advice-ref="druid-stat-interceptor" pointcut-ref="druid-stat-pointcut" />
     </aop:config>
+
+    <!--声明式事务第一步，定义事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!--使用注解实现声明式事务处理-->
+    <tx:annotation-driven transaction-manager="transactionManager" />  <!--指定一个事务管理器-->
+
 
 </beans>

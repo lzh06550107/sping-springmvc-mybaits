@@ -18,4 +18,9 @@ public class UserServiceImpl implements UserService {
     public List<User> finaAll() {
         return userDao.findAll();
     }
+
+    @Override
+    public boolean insert(User user) {
+        return Boolean.parseBoolean(userDao.insert(user)+"");
+    }
 }
