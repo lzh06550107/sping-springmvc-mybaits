@@ -1,12 +1,9 @@
 package cn.liaozhonghao.www.service;
 
-import cn.liaozhonghao.www.model.User;
-
-import java.util.List;
+import cn.liaozhonghao.www.dto.UserDTO;
 
 public interface UserService {
 
-    List<User> finaAll();
+     UserDTO find(String id);
 
-    boolean insert(User user);
 }

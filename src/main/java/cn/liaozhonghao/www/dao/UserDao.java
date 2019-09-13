@@ -8,14 +8,7 @@ import java.util.List;
 @Repository
 public interface UserDao {
 
-    List<User> findAll();
-
-    int insert(User user);
-
-    int update(User user);
-
-    int delete(Integer id);
-
-    int deleteByName(String name);
+    // 查询用户
+    User find(String id);
 
 }

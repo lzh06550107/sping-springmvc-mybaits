@@ -6,7 +6,7 @@ public class User implements Serializable {
 
     private Integer id;
     private String name;
-    private String password;
+    private String account;
 
     public Integer getId() {
         return id;
@@ -16,8 +16,8 @@ public class User implements Serializable {
         return name;
     }
 
-    public String getPassword() {
-        return password;
+    public String getAccount() {
+        return account;
     }
 
     public void setId(Integer id) {
@@ -28,7 +28,7 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setAccount(String account) {
+        this.account = account;
     }
 }

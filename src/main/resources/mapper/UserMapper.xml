@@ -4,41 +4,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.liaozhonghao.www.dao.UserDao">
 
-    <sql id="userField">
-        a.id as "id",
-        a.name as "name",
-        a.password as "password"
+    <resultMap id="userMap" type="User">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="account" column="account" />
+    </resultMap>
+
+    <sql id="table_column">
+        id,
+        name,
+        account
     </sql>
 
-    <select id="findAll" resultType="User">
-        select
-        <include refid="userField" />
-        from ay_user as a
+    <select id="find" resultMap="userMap">
+
+        SELECT
+        <include refid="table_column" />
+        FROM user
+        <where>
+            id = #{id}
+        </where>
+
     </select>
-
-<!--    <insert id="insert" parameterType="cn.liaozhonghao.www.model.User">-->
-<!--        INSERT INTO ay_user(id, name, password) VALUES (#{id}, #{name}, #{password});-->
-<!--    </insert>-->
-
-    <!-- 如果 User 类型的参数对象传递到了语句中，id、username 和 password 属性将会被查找，然后将它们的值传入预处理语句的参数中。-->
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="User">
-        INSERT INTO ay_user(name, password) VALUE (#{name}, #{password});
-    </insert>
-
-    <update id="update" parameterType="User">
-        UPDATE ay_user SET
-        name = #{name},
-        password = #{password}
-        WHERE id = #{id}
-    </update>
-
-    <delete id="delete" parameterType="int">
-        DELETE FROM ay_user
-        WHERE id = #{id}
-    </delete>
-
-    <delete id="deleteByName" parameterType="String">
-        DELETE FROM ay_user
-        WHERE name = #{name}
-    </delete>
 </mapper>

@@ -946,24 +946,129 @@
       <DefaultForCharset>0</DefaultForCharset>
     </collation>
     <table id="240" parent="8" name="ay_user"/>
-    <column id="241" parent="240" name="id">
+    <table id="241" parent="8" name="mood">
+      <Collation>utf8_general_ci</Collation>
+    </table>
+    <table id="242" parent="8" name="user">
+      <Collation>utf8_general_ci</Collation>
+    </table>
+    <table id="243" parent="8" name="user_mood_praise_rel">
+      <Collation>utf8_general_ci</Collation>
+    </table>
+    <column id="244" parent="240" name="id">
       <Position>1</Position>
       <DataType>bigint(32)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="242" parent="240" name="name">
+    <column id="245" parent="240" name="name">
       <Position>2</Position>
       <DataType>varchar(10)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="243" parent="240" name="password">
+    <column id="246" parent="240" name="password">
       <Position>3</Position>
       <DataType>varchar(64)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="244" parent="240" name="PRIMARY">
+    <key id="247" parent="240" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="248" parent="241" name="id">
+      <Position>1</Position>
+      <DataType>bigint(32)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="249" parent="241" name="content">
+      <Position>2</Position>
+      <DataType>varchar(256)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="250" parent="241" name="user_id">
+      <Position>3</Position>
+      <DataType>varchar(32)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="251" parent="241" name="publish_time">
+      <Position>4</Position>
+      <DataType>datetime|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="252" parent="241" name="praise_num">
+      <Position>5</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="253" parent="241" name="mood_user_id_index">
+      <ColNames>user_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="254" parent="241" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="255" parent="242" name="id">
+      <Position>1</Position>
+      <DataType>bigint(32)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="256" parent="242" name="name">
+      <Position>2</Position>
+      <DataType>varchar(20)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="257" parent="242" name="account">
+      <Position>3</Position>
+      <DataType>varchar(20)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="258" parent="242" name="user_name_index">
+      <ColNames>name</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="259" parent="242" name="user_account_index">
+      <ColNames>account</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="260" parent="242" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="261" parent="243" name="id">
+      <Position>1</Position>
+      <DataType>bigint(32)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="262" parent="243" name="user_id">
+      <Position>2</Position>
+      <DataType>varchar(32)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="263" parent="243" name="mood_id">
+      <Position>3</Position>
+      <DataType>varchar(32)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="264" parent="243" name="user_mood_praise_rel_user_id_index">
+      <ColNames>user_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="265" parent="243" name="user_mood_praise_rel_mood_id_index">
+      <ColNames>mood_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="266" parent="243" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
